@@ -1,0 +1,10 @@
+mutation DeleteMinerInfo {
+  delete_miner_info(where: {
+    stx_address: { _eq : "123" }
+  }) {
+    affected_rows
+    returning{
+      id
+    }
+  }
+}
