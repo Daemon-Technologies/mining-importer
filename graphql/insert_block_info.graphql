@@ -1,0 +1,5 @@
+mutation insertBlockInfos($rows: [block_info_insert_input!]!) {
+  insert_block_info(objects: $rows) {
+    affected_rows
+  }
+}

@@ -1,0 +1,5 @@
+query queryBurnchainOpsRowid {
+  config(where: {name: {_eq: "burnchain_ops_rowid"}}) {
+    value
+  }
+}

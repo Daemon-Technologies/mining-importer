@@ -1,0 +1,6 @@
+query queryLatestBlockHeight {
+  block_info(limit: 1, order_by: {btc_block_height: desc, stacks_block_height: desc}) {
+    stacks_block_height
+    btc_block_height
+  }
+}

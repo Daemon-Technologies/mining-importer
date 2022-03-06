@@ -6,29 +6,71 @@ import secp256k1 from 'secp256k1'
 import c32 from 'c32check'
 import {STACKS_NODE_SQLITE_PATH} from "../common/constants";
 import axios from "axios";
+import {async} from "rxjs";
+
+async function getRawTransaction(txid){
+    let url = 'http://daemontech2:daemontech2@47.242.123.146:8332/'
+    try {
+        const response = await axios({
+            method: 'post',
+            url: url,
+            data: {
+
+                "jsonrpc": "1.0",
+                "id": "curltest",
+                "method": "getrawtransaction",
+                "params": [txid, true]
+
+            }
+        })
+
+        return {response: response, error: undefined}
+    } catch (e) {
+
+        return  {response: undefined, error: e}
+    }
+
+}
+
+function getVOUTValue(vout){
+    let UTXOOutput = 0
+    vout.forEach(
+        v => {
+            UTXOOutput += v.value
+        }
+    )
+    return UTXOOutput
+}
 
 
 export async function getTransactionFromBtcRpc(txid) {
-    let url = 'http://daemontech2:daemontech2@47.242.123.146:8332/'
+    let ob = await getRawTransaction(txid)
+    if (ob.error != undefined){
+        console.log(`getRawTransaction error: ${ob.error}`)
+        return
+    }
 
-    const response = await axios({
-        method: 'post',
-        url: url,
-        data: {
+    let UTXOOutput = getVOUTValue(ob.response.data.result.vout)
 
-            "jsonrpc": "1.0",
-            "id": "curltest",
-            "method": "gettransaction",
-            "params": [txid, true]
+    console.log(`UTXOOutput is ${UTXOOutput}`)
 
+    let UTXOInput = 0
+    for (let txIn of ob.response.data.result.vin) {
+        let UTXOInputOb = await getRawTransaction(txIn.txid)
+        if (UTXOInputOb.error != undefined){
+            console.log(`getRawTransaction error: ${UTXOInputOb.error}`)
+            return
         }
-    })
-    console.log(response)
+        UTXOInput += getVOUTValue(UTXOInputOb.response.data.result.vout)
+
+    }
+
+    return Math.round(UTXOInput * 1e8 - UTXOOutput * 1e8)
 }
 
 
 
-export async function getMinerInfo(stacks_block_height, burn_block_height) {
+export async function getMinerInfo(stacks_block_height, burn_block_height, burnchain_ops_rowid) {
     const burnchain_db_path = 'burnchain/burnchain.sqlite'
 
     const sortition_db_path = "burnchain/sortition/marf.sqlite"
@@ -62,8 +104,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height) {
 
     // burnchain queries
     // todo from db
-    let rowid = 300000
-    const stmt_all_burnchain_ops = burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops where rowid > ${300000}`)
+    const stmt_all_burnchain_ops = burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops where rowid > ${burnchain_ops_rowid}`)
 
     // sortition queries
     // todo need to be op
