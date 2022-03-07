@@ -117,7 +117,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
     // sortition queries
     const stmt_all_blocks = sortition_db.prepare(`SELECT * FROM snapshots WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height} order by block_height desc `)
 
-    const stmt_all_block_commits = sortition_db.prepare(`SELECT * FROM block_commits WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height} order by block_height`)
+    const stmt_all_block_commits = sortition_db.prepare(`SELECT * FROM block_commits WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height + delta_height} order by block_height`)
 
     const stmt_all_leader_keys = sortition_db.prepare(`SELECT * FROM leader_keys WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height}`)
 

@@ -34,15 +34,15 @@ async function importMiningData() {
     let start_stacks_block_height = latest_block.block_info.length === 0? 0 : latest_block.block_info[0].stacks_block_height
     let start_btc_block_height = latest_block.block_info.length === 0? 666050 : latest_block.block_info[0].btc_block_height
     console.log(`start fetching miner data. 
-        stx height: ${start_stacks_block_height} 
-        btc height: ${start_btc_block_height}
-        delta height: ${DELTA_HEIGHT}
+        stx height: ${parseInt(String(start_stacks_block_height))} 
+        btc height: ${parseInt(String(start_btc_block_height))}
+        delta height: ${parseInt(DELTA_HEIGHT)}
         latest txid: ${latest_txid}`)
     let miningInfo = await getMinerInfo(
         start_stacks_block_height,
         start_btc_block_height,
         latest_rowid,
-        DELTA_HEIGHT,
+        parseInt(DELTA_HEIGHT),
         latest_txid
     )
 
@@ -55,6 +55,7 @@ async function importMiningData() {
         // handle blockInfo and commitInfo
         let rowsToImport : Block_Info_Insert_Input[] = []
         for (let k of Object.keys(miningInfo.winner_info)){
+            let miningInfoLen = Object.getOwnPropertyNames(miningInfo.winner_info).length
             let block_info = miningInfo.winner_info[k]
             let commit_info = miningInfo.block_commits[k]
             let blockInfoItem: Block_Info_Insert_Input = {}
@@ -74,6 +75,8 @@ async function importMiningData() {
             let commitInfoItemsRecord: Record<string, Commit_Info_Insert_Input> = {}
 
             for (let commit_info_key in commit_info){
+                console.log(`mining_info ${k}/${miningInfoLen + start_stacks_block_height}`)
+                console.log(`commit_info ${commit_info_key}/${commit_info.length}`)
                 let item = commit_info[commit_info_key]
                 let commitInfoItem: Commit_Info_Insert_Input = {}
                 commitInfoItem.btc_block_height = blockInfoItem.btc_block_height = block_info.burn_chain_height
