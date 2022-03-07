@@ -12,6 +12,7 @@ import {block} from "@graphql-codegen/visitor-plugin-common";
 import c32 from "c32check";
 import {fetchLatestBlock} from "./common/fetch-latest-block-height";
 import {fetchBurnchainOpsRowid} from "./common/fetch-burnchain-ops-rowid";
+import {fetchLatestTxId} from "./common/fetch-latest-txid";
 
 
 
@@ -23,17 +24,25 @@ async function importMiningData() {
     // find the start_stacks_block_height and start_burn_block_height
     let latest_block = await fetchLatestBlock()
     //console.log(latest_block.block_info[0].stacks_block_height, latest_block.block_info[0].btc_block_height)
-
+    let latest_txid_ob = await fetchLatestTxId()
+    let latest_txid = latest_txid_ob.commit_gas_info.length == 0? "": latest_txid_ob.commit_gas_info[0].commit_btc_tx_id
     // find latest burnchain ops rowid
     let latest_rowid_ob = await fetchBurnchainOpsRowid()
     let latest_rowid = latest_rowid_ob.config.length === 0 ? 0 : parseInt(latest_rowid_ob.config[0].value)
 
     let start_stacks_block_height = latest_block.block_info.length === 0? 0 : latest_block.block_info[0].stacks_block_height
-    let start_btc_block_height = latest_block.block_info.length === 0? 0 : latest_block.block_info[0].btc_block_height
+    let start_btc_block_height = latest_block.block_info.length === 0? 666050 : latest_block.block_info[0].btc_block_height
+    console.log(`start fetching miner data. 
+        stx height: ${start_stacks_block_height} 
+        btc height: ${start_btc_block_height}
+        delta height: 50
+        latest txid: ${latest_txid}`)
     let miningInfo = await getMinerInfo(
         start_stacks_block_height,
         start_btc_block_height,
-        latest_rowid
+        latest_rowid,
+        50,
+        latest_txid
     )
 
     if (Object.getOwnPropertyNames(miningInfo.winner_info).length !==  Object.getOwnPropertyNames(miningInfo.block_commits).length) {
@@ -58,7 +67,7 @@ async function importMiningData() {
             blockInfoItem.tx_reward = parseFloat(block_info.tx_reward)
             blockInfoItem.commit_value = parseInt(block_info.burn_fee)
             blockInfoItem.winner_to_all_commit = { data : []}
-            // item.timestamp
+            blockInfoItem.timestamp = block_info.burn_header_timestamp
 
             // commit_info
             let commitInfoItemsRecord: Record<string, Commit_Info_Insert_Input> = {}
@@ -81,9 +90,13 @@ async function importMiningData() {
 
                 // commit_gas_info
                 let commitGasInfoItem: Commit_Gas_Info_Insert_Input = {}
-                let d = await getTransactionFromBtcRpc(item.txid)
+                if (item.txid == "3839a0f2607006cd066ad1093012e30f519b97c04813fdf96aac34115db6cdd4"){
+                    console.log("in")
+                }
+                let d = await getTransactionFromBtcRpc(item.txid, commitInfoItem.btc_address)
+
                 commitGasInfoItem.commit_btc_tx_id = item.txid
-                commitGasInfoItem.commit_btc_gas_fee = d - commitInfoItem.commit_value
+                commitGasInfoItem.commit_btc_gas_fee = d
                 commitGasInfoItem.stacks_block_height = blockInfoItem.stacks_block_height
                 commitGasInfoItem.btc_address = commitInfoItem.btc_address
                 commitGasInfoItem.stx_address = commitInfoItem.stx_address
@@ -118,5 +131,5 @@ async function importMiningData() {
 // }) ()
 
 
-setInterval(importMiningData, 600000)
+//setInterval(importMiningData, 600000)
 importMiningData().then(r => console.log(r))

@@ -13,7 +13,6 @@ export type Scalars = {
   Int: number;
   Float: number;
   float8: any;
-  timetz: any;
 };
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
@@ -82,7 +81,7 @@ export type Block_Info = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value: Scalars['Int'];
   stacks_block_height: Scalars['Int'];
-  timestamp?: Maybe<Scalars['timetz']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
   winner_btc_address: Scalars['String'];
   winner_stx_address: Scalars['String'];
@@ -149,6 +148,7 @@ export type Block_Info_Avg_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -161,7 +161,7 @@ export type Block_Info_Bool_Exp = {
   btc_block_height?: Maybe<Int_Comparison_Exp>;
   commit_value?: Maybe<Int_Comparison_Exp>;
   stacks_block_height?: Maybe<Int_Comparison_Exp>;
-  timestamp?: Maybe<Timetz_Comparison_Exp>;
+  timestamp?: Maybe<Int_Comparison_Exp>;
   tx_reward?: Maybe<Float8_Comparison_Exp>;
   winner_btc_address?: Maybe<String_Comparison_Exp>;
   winner_stx_address?: Maybe<String_Comparison_Exp>;
@@ -182,6 +182,7 @@ export type Block_Info_Inc_Input = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
 };
 
@@ -191,7 +192,7 @@ export type Block_Info_Insert_Input = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
-  timestamp?: Maybe<Scalars['timetz']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
   winner_btc_address?: Maybe<Scalars['String']>;
   winner_stx_address?: Maybe<Scalars['String']>;
@@ -205,7 +206,7 @@ export type Block_Info_Max_Fields = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
-  timestamp?: Maybe<Scalars['timetz']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
   winner_btc_address?: Maybe<Scalars['String']>;
   winner_stx_address?: Maybe<Scalars['String']>;
@@ -218,7 +219,7 @@ export type Block_Info_Min_Fields = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
-  timestamp?: Maybe<Scalars['timetz']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
   winner_btc_address?: Maybe<Scalars['String']>;
   winner_stx_address?: Maybe<Scalars['String']>;
@@ -284,7 +285,7 @@ export type Block_Info_Set_Input = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
-  timestamp?: Maybe<Scalars['timetz']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
   winner_btc_address?: Maybe<Scalars['String']>;
   winner_stx_address?: Maybe<Scalars['String']>;
@@ -297,6 +298,7 @@ export type Block_Info_Stddev_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -307,6 +309,7 @@ export type Block_Info_Stddev_Pop_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -317,6 +320,7 @@ export type Block_Info_Stddev_Samp_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -327,6 +331,7 @@ export type Block_Info_Sum_Fields = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
+  timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
 };
 
@@ -357,6 +362,7 @@ export type Block_Info_Var_Pop_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -367,6 +373,7 @@ export type Block_Info_Var_Samp_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -377,6 +384,7 @@ export type Block_Info_Variance_Fields = {
   btc_block_height?: Maybe<Scalars['Float']>;
   commit_value?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
@@ -1567,19 +1575,6 @@ export type Subscription_RootConfig_By_PkArgs = {
   name: Scalars['String'];
 };
 
-/** Boolean expression to compare columns of type "timetz". All fields are combined with logical 'AND'. */
-export type Timetz_Comparison_Exp = {
-  _eq?: Maybe<Scalars['timetz']>;
-  _gt?: Maybe<Scalars['timetz']>;
-  _gte?: Maybe<Scalars['timetz']>;
-  _in?: Maybe<Array<Scalars['timetz']>>;
-  _is_null?: Maybe<Scalars['Boolean']>;
-  _lt?: Maybe<Scalars['timetz']>;
-  _lte?: Maybe<Scalars['timetz']>;
-  _neq?: Maybe<Scalars['timetz']>;
-  _nin?: Maybe<Array<Scalars['timetz']>>;
-};
-
 export type InsertBlockInfosMutationVariables = Exact<{
   rows: Array<Block_Info_Insert_Input> | Block_Info_Insert_Input;
 }>;
@@ -1596,6 +1591,11 @@ export type QueryLatestBlockHeightQueryVariables = Exact<{ [key: string]: never;
 
 
 export type QueryLatestBlockHeightQuery = { __typename?: 'query_root', block_info: Array<{ __typename?: 'block_info', stacks_block_height: number, btc_block_height?: number | null | undefined }> };
+
+export type QueryLatestTxIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type QueryLatestTxIdQuery = { __typename?: 'query_root', commit_gas_info: Array<{ __typename?: 'commit_gas_info', commit_btc_tx_id: string }> };
 
 
 export const InsertBlockInfosDocument = gql`
@@ -1623,6 +1623,13 @@ export const QueryLatestBlockHeightDocument = gql`
   }
 }
     `;
+export const QueryLatestTxIdDocument = gql`
+    query queryLatestTxId {
+  commit_gas_info(limit: 1, order_by: {stacks_block_height: desc}) {
+    commit_btc_tx_id
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string) => Promise<T>;
 
@@ -1639,6 +1646,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     queryLatestBlockHeight(variables?: QueryLatestBlockHeightQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<QueryLatestBlockHeightQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<QueryLatestBlockHeightQuery>(QueryLatestBlockHeightDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'queryLatestBlockHeight');
+    },
+    queryLatestTxId(variables?: QueryLatestTxIdQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<QueryLatestTxIdQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<QueryLatestTxIdQuery>(QueryLatestTxIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'queryLatestTxId');
     }
   };
 }

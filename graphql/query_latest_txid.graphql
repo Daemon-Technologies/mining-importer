@@ -1,0 +1,5 @@
+query queryLatestTxId {
+  commit_gas_info(limit: 1, order_by: {stacks_block_height: desc}) {
+    commit_btc_tx_id
+  }
+}

@@ -42,8 +42,21 @@ function getVOUTValue(vout){
     return UTXOOutput
 }
 
+function getVOutValueByBtcAddress(vout, btc_address){
+    let UTXOOutput = 0
+    for (let v of vout){
+        if (v.scriptPubKey.addresses != undefined && v.scriptPubKey.addresses.length > 0 && v.scriptPubKey.addresses[0] == btc_address){
+            UTXOOutput = UTXOOutput + v.value
+        }
+    }
 
-export async function getTransactionFromBtcRpc(txid) {
+    return UTXOOutput
+}
+
+export async function getTransactionFromBtcRpc(txid, btc_address) {
+    if (txid == "3839a0f2607006cd066ad1093012e30f519b97c04813fdf96aac34115db6cdd4"){
+        console.log("in")
+    }
     let ob = await getRawTransaction(txid)
     if (ob.error != undefined){
         console.log(`getRawTransaction error: ${ob.error}`)
@@ -61,7 +74,7 @@ export async function getTransactionFromBtcRpc(txid) {
             console.log(`getRawTransaction error: ${UTXOInputOb.error}`)
             return
         }
-        UTXOInput += getVOUTValue(UTXOInputOb.response.data.result.vout)
+        UTXOInput += getVOutValueByBtcAddress(UTXOInputOb.response.data.result.vout, btc_address)
 
     }
 
@@ -70,7 +83,7 @@ export async function getTransactionFromBtcRpc(txid) {
 
 
 
-export async function getMinerInfo(stacks_block_height, burn_block_height, burnchain_ops_rowid) {
+export async function getMinerInfo(stacks_block_height, burn_block_height, burnchain_ops_rowid, delta_height, latest_txid) {
     const burnchain_db_path = 'burnchain/burnchain.sqlite'
 
     const sortition_db_path = "burnchain/sortition/marf.sqlite"
@@ -101,28 +114,24 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
         readonly: true,
         fileMustExist: true,
     })
-
+    //console.log(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = ${latest_txid})`)
     // burnchain queries
-    // todo from db
-    const stmt_all_burnchain_ops = burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops where rowid > ${burnchain_ops_rowid}`)
+    const stmt_all_burnchain_ops = latest_txid == "" ? burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops WHERE rowid > 0`)
+        : burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = '')`)
 
     // sortition queries
-    // todo need to be op
-    const stmt_all_blocks = sortition_db.prepare(`SELECT * FROM snapshots WHERE block_height > ${burn_block_height} order by block_height desc `)
-    //const stmt_all_blocks = sortition_db.prepare(`SELECT * FROM snapshots order by block_height desc`)
-    //console.log(stmt_all_blocks)
-    const stmt_all_block_commits = sortition_db.prepare(`SELECT * FROM block_commits WHERE block_height > ${burn_block_height} order by block_height`)
-    //console.log(stmt_all_block_commits)
-    //const stmt_all_leader_keys = sortition_db.prepare(`SELECT * FROM leader_keys WHERE block_height > ${burn_block_height} order by block_height`)
-    const stmt_all_leader_keys = sortition_db.prepare(`SELECT * FROM leader_keys`)
-    //console.log(stmt_all_leader_keys)
+    const stmt_all_blocks = sortition_db.prepare(`SELECT * FROM snapshots WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height} order by block_height desc `)
+
+    const stmt_all_block_commits = sortition_db.prepare(`SELECT * FROM block_commits WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height} order by block_height`)
+
+    const stmt_all_leader_keys = sortition_db.prepare(`SELECT * FROM leader_keys WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height}`)
 
     // header queries
-    const stmt_all_payments = headers_db.prepare(`SELECT * FROM payments WHERE stacks_block_height > ${stacks_block_height} order by stacks_block_height`)
-    const stmt_all_block_headers = headers_db.prepare(`SELECT * FROM block_headers WHERE block_height > ${stacks_block_height} order by block_height`)
+    const stmt_all_payments = headers_db.prepare(`SELECT * FROM payments WHERE stacks_block_height > ${stacks_block_height} AND stacks_block_height <= ${stacks_block_height+delta_height} order by stacks_block_height`)
+    const stmt_all_block_headers = headers_db.prepare(`SELECT * FROM block_headers WHERE block_height > ${stacks_block_height} AND block_height <= ${stacks_block_height+delta_height} order by block_height`)
 
     // staging queries
-    const stmt_all_staging_blocks = staging_db.prepare(`SELECT * FROM staging_blocks WHERE height > ${stacks_block_height} order by height`)
+    const stmt_all_staging_blocks = staging_db.prepare(`SELECT * FROM staging_blocks WHERE height > ${stacks_block_height} AND height <= ${stacks_block_height+delta_height} order by height`)
 
     // transactions query
     const stmt_all_transactions = use_txs ? headers_db.prepare('SELECT * FROM transactions') : null
