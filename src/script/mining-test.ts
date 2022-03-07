@@ -4,12 +4,11 @@ import stacks_transactions from '@blockstack/stacks-transactions'
 const { getAddressFromPublicKey, TransactionVersion } = stacks_transactions
 import secp256k1 from 'secp256k1'
 import c32 from 'c32check'
-import {STACKS_NODE_SQLITE_PATH} from "../common/constants";
+import {BTC_RPC_ENDPOINT, STACKS_NODE_SQLITE_PATH} from "../common/constants";
 import axios from "axios";
-import {async} from "rxjs";
 
 async function getRawTransaction(txid){
-    let url = 'http://daemontech2:daemontech2@47.242.123.146:8332/'
+    let url = BTC_RPC_ENDPOINT
     try {
         const response = await axios({
             method: 'post',
