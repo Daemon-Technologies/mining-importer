@@ -132,4 +132,34 @@ async function importMiningData() {
 
 
 //setInterval(importMiningData, 600000)
-importMiningData().then(r => console.log(r))
+//importMiningData().then(r => console.log(r))
+(async () => {
+    while (true){
+        await sleep(5000)
+        await importMiningData()
+    }
+}) ()
+
+async function work(ms){
+    console.log("working")
+    return new Promise<void>((resolve, reject) => {
+        setTimeout(
+            () => {
+                console.log("working time out")
+                resolve()
+            }, ms)
+
+    })
+}
+
+async function sleep(ms) {
+    console.log("sleeping")
+    return new Promise<void>((resolve, reject) => {
+        setTimeout(
+            () => {
+                console.log("sleep time out")
+                resolve()
+            }, ms)
+
+    })
+}
