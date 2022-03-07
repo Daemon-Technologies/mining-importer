@@ -54,9 +54,6 @@ function getVOutValueByBtcAddress(vout, btc_address){
 }
 
 export async function getTransactionFromBtcRpc(txid, btc_address) {
-    if (txid == "3839a0f2607006cd066ad1093012e30f519b97c04813fdf96aac34115db6cdd4"){
-        console.log("in")
-    }
     let ob = await getRawTransaction(txid)
     if (ob.error != undefined){
         console.log(`getRawTransaction error: ${ob.error}`)
@@ -65,7 +62,6 @@ export async function getTransactionFromBtcRpc(txid, btc_address) {
 
     let UTXOOutput = getVOUTValue(ob.response.data.result.vout)
 
-    console.log(`UTXOOutput is ${UTXOOutput}`)
 
     let UTXOInput = 0
     for (let txIn of ob.response.data.result.vin) {
@@ -78,6 +74,7 @@ export async function getTransactionFromBtcRpc(txid, btc_address) {
 
     }
 
+    console.log(`UTXO Gas is ${Math.round(UTXOInput * 1e8 - UTXOOutput * 1e8)}`)
     return Math.round(UTXOInput * 1e8 - UTXOOutput * 1e8)
 }
 
@@ -116,8 +113,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
     })
     //console.log(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = ${latest_txid})`)
     // burnchain queries
-    const stmt_all_burnchain_ops = latest_txid == "" ? burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops WHERE rowid > 0`)
-        : burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = '')`)
+    const stmt_all_burnchain_ops = burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = '')`)
 
     // sortition queries
     const stmt_all_blocks = sortition_db.prepare(`SELECT * FROM snapshots WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height} order by block_height desc `)

@@ -13,6 +13,7 @@ import c32 from "c32check";
 import {fetchLatestBlock} from "./common/fetch-latest-block-height";
 import {fetchBurnchainOpsRowid} from "./common/fetch-burnchain-ops-rowid";
 import {fetchLatestTxId} from "./common/fetch-latest-txid";
+import {DELTA_HEIGHT} from "../common/constants";
 
 
 
@@ -35,13 +36,13 @@ async function importMiningData() {
     console.log(`start fetching miner data. 
         stx height: ${start_stacks_block_height} 
         btc height: ${start_btc_block_height}
-        delta height: 50
+        delta height: ${DELTA_HEIGHT}
         latest txid: ${latest_txid}`)
     let miningInfo = await getMinerInfo(
         start_stacks_block_height,
         start_btc_block_height,
         latest_rowid,
-        50,
+        DELTA_HEIGHT,
         latest_txid
     )
 
@@ -90,9 +91,6 @@ async function importMiningData() {
 
                 // commit_gas_info
                 let commitGasInfoItem: Commit_Gas_Info_Insert_Input = {}
-                if (item.txid == "3839a0f2607006cd066ad1093012e30f519b97c04813fdf96aac34115db6cdd4"){
-                    console.log("in")
-                }
                 let d = await getTransactionFromBtcRpc(item.txid, commitInfoItem.btc_address)
 
                 commitGasInfoItem.commit_btc_tx_id = item.txid
@@ -107,7 +105,6 @@ async function importMiningData() {
             rowsToImport.push(blockInfoItem)
         }
 
-        console.log(rowsToImport)
         await importBlockInfos(rowsToImport)
     }
 
@@ -135,8 +132,13 @@ async function importMiningData() {
 //importMiningData().then(r => console.log(r))
 (async () => {
     while (true){
-        await sleep(5000)
-        await importMiningData()
+        try {
+            await sleep(5000)
+            await importMiningData()
+        } catch (e) {
+            console.log(e)
+        }
+
     }
 }) ()
 
