@@ -25,8 +25,9 @@ async function importMiningData() {
     // find the start_stacks_block_height and start_burn_block_height
     let latest_block = await fetchLatestBlock()
     //console.log(latest_block.block_info[0].stacks_block_height, latest_block.block_info[0].btc_block_height)
-    let latest_txid_ob = await fetchLatestTxId()
-    let latest_txid = latest_txid_ob.commit_gas_info.length == 0? "": latest_txid_ob.commit_gas_info[0].commit_btc_tx_id
+    //let latest_txid_ob = await fetchLatestTxId()
+    //let latest_txid = latest_txid_ob.commit_gas_info.length == 0? "": latest_txid_ob.commit_gas_info[0].commit_btc_tx_id
+    let latest_txid = ""
     // find latest burnchain ops rowid
     let latest_rowid_ob = await fetchBurnchainOpsRowid()
     let latest_rowid = latest_rowid_ob.config.length === 0 ? 0 : parseInt(latest_rowid_ob.config[0].value)
