@@ -6,7 +6,7 @@ import {importBlockInfos} from "./common/importer-block-info";
 import {
     Block_Info_Insert_Input, Commit_Gas_Info_Insert_Input,
     Commit_Info_Arr_Rel_Insert_Input,
-    Commit_Info_Insert_Input
+    Commit_Info_Insert_Input, Config_Insert_Input
 } from "../../graphql/node-types";
 import {block} from "@graphql-codegen/visitor-plugin-common";
 import c32 from "c32check";
@@ -14,6 +14,7 @@ import {fetchLatestBlock} from "./common/fetch-latest-block-height";
 import {fetchBurnchainOpsRowid} from "./common/fetch-burnchain-ops-rowid";
 import {fetchLatestTxId} from "./common/fetch-latest-txid";
 import {DELTA_HEIGHT} from "../common/constants";
+import {importTokenPrice} from "./common/import-token-price";
 
 
 
@@ -118,22 +119,43 @@ async function importMiningData() {
 }
 
 
+async function updateTokenPrice(){
+    return new Promise(async function (resolve, reject) {
+        try {
+            let stx_usdt_url = "https://api.binance.com/api/v3/ticker/price?symbol=STXUSDT";
+            let btc_usdt_url = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
+            const stx_resp = await axios(stx_usdt_url)
+            const btc_resp = await axios(btc_usdt_url)
+            console.log(stx_resp.data)
+            if (stx_resp.data != undefined && btc_resp.data != undefined){
+                let rows :Config_Insert_Input[] = []
+                let stx_row : Config_Insert_Input = {
+                    name: "stx_price",
+                    value: stx_resp.data.price,
+                    comment: "stx price"
+                }
+                let btc_row : Config_Insert_Input = {
+                    name: "btc_price",
+                    value: btc_resp.data.price,
+                    comment: "btc price"
+                }
+                rows.push(stx_row)
+                rows.push(btc_row)
+                await importTokenPrice(rows)
+                resolve("finished")
+            }
+        } catch (error){
+            reject(error)
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+}
 
 
+updateTokenPrice()
 
-
-
-//
-// (async () => {
-//     let a = await fetchLatestBlock()
-//     console.log(a.block_info[0].stacks_block_height)
-//     //let d = await getTransactionFromBtcRpc("2c8adfc0d8f0b6a73cecfe7237941e4f7bde43c50d6ec2aa8d6d6f08777ebe67")
-//     //console.log(d)
-// }) ()
-
-
-//setInterval(importMiningData, 600000)
-//importMiningData().then(r => console.log(r))
+/*
 (async () => {
     while (true){
         try {
@@ -146,6 +168,21 @@ async function importMiningData() {
     }
 }) ()
 
+ */
+
+async function sleep(ms) {
+    console.log("sleeping")
+    return new Promise<void>((resolve, reject) => {
+        setTimeout(
+            () => {
+                console.log("sleep time out")
+                resolve()
+            }, ms)
+    })
+}
+
+
+/*
 async function work(ms){
     console.log("working")
     return new Promise<void>((resolve, reject) => {
@@ -158,14 +195,7 @@ async function work(ms){
     })
 }
 
-async function sleep(ms) {
-    console.log("sleeping")
-    return new Promise<void>((resolve, reject) => {
-        setTimeout(
-            () => {
-                console.log("sleep time out")
-                resolve()
-            }, ms)
+ */
 
-    })
-}
+
+

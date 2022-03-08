@@ -15,7 +15,7 @@ export type Scalars = {
   float8: any;
 };
 
-/** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
+/** expression to compare columns of type Boolean. All fields are combined with logical 'AND'. */
 export type Boolean_Comparison_Exp = {
   _eq?: Maybe<Scalars['Boolean']>;
   _gt?: Maybe<Scalars['Boolean']>;
@@ -28,7 +28,7 @@ export type Boolean_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['Boolean']>>;
 };
 
-/** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
+/** expression to compare columns of type Int. All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
   _eq?: Maybe<Scalars['Int']>;
   _gt?: Maybe<Scalars['Int']>;
@@ -41,36 +41,22 @@ export type Int_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars['Int']>>;
 };
 
-/** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
+/** expression to compare columns of type String. All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
   _eq?: Maybe<Scalars['String']>;
   _gt?: Maybe<Scalars['String']>;
   _gte?: Maybe<Scalars['String']>;
-  /** does the column match the given case-insensitive pattern */
   _ilike?: Maybe<Scalars['String']>;
   _in?: Maybe<Array<Scalars['String']>>;
-  /** does the column match the given POSIX regular expression, case insensitive */
-  _iregex?: Maybe<Scalars['String']>;
   _is_null?: Maybe<Scalars['Boolean']>;
-  /** does the column match the given pattern */
   _like?: Maybe<Scalars['String']>;
   _lt?: Maybe<Scalars['String']>;
   _lte?: Maybe<Scalars['String']>;
   _neq?: Maybe<Scalars['String']>;
-  /** does the column NOT match the given case-insensitive pattern */
   _nilike?: Maybe<Scalars['String']>;
   _nin?: Maybe<Array<Scalars['String']>>;
-  /** does the column NOT match the given POSIX regular expression, case insensitive */
-  _niregex?: Maybe<Scalars['String']>;
-  /** does the column NOT match the given pattern */
   _nlike?: Maybe<Scalars['String']>;
-  /** does the column NOT match the given POSIX regular expression, case sensitive */
-  _nregex?: Maybe<Scalars['String']>;
-  /** does the column NOT match the given SQL regular expression */
   _nsimilar?: Maybe<Scalars['String']>;
-  /** does the column match the given POSIX regular expression, case sensitive */
-  _regex?: Maybe<Scalars['String']>;
-  /** does the column match the given SQL regular expression */
   _similar?: Maybe<Scalars['String']>;
 };
 
@@ -87,7 +73,7 @@ export type Block_Info = {
   winner_stx_address: Scalars['String'];
   /** An array relationship */
   winner_to_all_commit: Array<Commit_Info>;
-  /** An aggregate relationship */
+  /** An aggregated array relationship */
   winner_to_all_commit_aggregate: Commit_Info_Aggregate;
 };
 
@@ -122,7 +108,7 @@ export type Block_Info_Aggregate = {
 export type Block_Info_Aggregate_Fields = {
   __typename?: 'block_info_aggregate_fields';
   avg?: Maybe<Block_Info_Avg_Fields>;
-  count: Scalars['Int'];
+  count?: Maybe<Scalars['Int']>;
   max?: Maybe<Block_Info_Max_Fields>;
   min?: Maybe<Block_Info_Min_Fields>;
   stddev?: Maybe<Block_Info_Stddev_Fields>;
@@ -141,6 +127,27 @@ export type Block_Info_Aggregate_FieldsCountArgs = {
   distinct?: Maybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "block_info" */
+export type Block_Info_Aggregate_Order_By = {
+  avg?: Maybe<Block_Info_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Block_Info_Max_Order_By>;
+  min?: Maybe<Block_Info_Min_Order_By>;
+  stddev?: Maybe<Block_Info_Stddev_Order_By>;
+  stddev_pop?: Maybe<Block_Info_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Block_Info_Stddev_Samp_Order_By>;
+  sum?: Maybe<Block_Info_Sum_Order_By>;
+  var_pop?: Maybe<Block_Info_Var_Pop_Order_By>;
+  var_samp?: Maybe<Block_Info_Var_Samp_Order_By>;
+  variance?: Maybe<Block_Info_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "block_info" */
+export type Block_Info_Arr_Rel_Insert_Input = {
+  data: Array<Block_Info_Insert_Input>;
+  on_conflict?: Maybe<Block_Info_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Block_Info_Avg_Fields = {
   __typename?: 'block_info_avg_fields';
@@ -152,11 +159,21 @@ export type Block_Info_Avg_Fields = {
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
+/** order by avg() on columns of table "block_info" */
+export type Block_Info_Avg_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+};
+
 /** Boolean expression to filter rows from the table "block_info". All fields are combined with a logical 'AND'. */
 export type Block_Info_Bool_Exp = {
-  _and?: Maybe<Array<Block_Info_Bool_Exp>>;
+  _and?: Maybe<Array<Maybe<Block_Info_Bool_Exp>>>;
   _not?: Maybe<Block_Info_Bool_Exp>;
-  _or?: Maybe<Array<Block_Info_Bool_Exp>>;
+  _or?: Maybe<Array<Maybe<Block_Info_Bool_Exp>>>;
   block_reward?: Maybe<Float8_Comparison_Exp>;
   btc_block_height?: Maybe<Int_Comparison_Exp>;
   commit_value?: Maybe<Int_Comparison_Exp>;
@@ -176,7 +193,7 @@ export enum Block_Info_Constraint {
   BlockInfoStacksBlockHeightKey = 'block_info_stacks_block_height_key'
 }
 
-/** input type for incrementing numeric columns in table "block_info" */
+/** input type for incrementing integer column in table "block_info" */
 export type Block_Info_Inc_Input = {
   block_reward?: Maybe<Scalars['float8']>;
   btc_block_height?: Maybe<Scalars['Int']>;
@@ -212,6 +229,18 @@ export type Block_Info_Max_Fields = {
   winner_stx_address?: Maybe<Scalars['String']>;
 };
 
+/** order by max() on columns of table "block_info" */
+export type Block_Info_Max_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+  winner_btc_address?: Maybe<Order_By>;
+  winner_stx_address?: Maybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Block_Info_Min_Fields = {
   __typename?: 'block_info_min_fields';
@@ -225,23 +254,41 @@ export type Block_Info_Min_Fields = {
   winner_stx_address?: Maybe<Scalars['String']>;
 };
 
+/** order by min() on columns of table "block_info" */
+export type Block_Info_Min_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+  winner_btc_address?: Maybe<Order_By>;
+  winner_stx_address?: Maybe<Order_By>;
+};
+
 /** response of any mutation on the table "block_info" */
 export type Block_Info_Mutation_Response = {
   __typename?: 'block_info_mutation_response';
-  /** number of rows affected by the mutation */
+  /** number of affected rows by the mutation */
   affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
+  /** data of the affected rows by the mutation */
   returning: Array<Block_Info>;
 };
 
-/** on_conflict condition type for table "block_info" */
+/** input type for inserting object relation for remote table "block_info" */
+export type Block_Info_Obj_Rel_Insert_Input = {
+  data: Block_Info_Insert_Input;
+  on_conflict?: Maybe<Block_Info_On_Conflict>;
+};
+
+/** on conflict condition type for table "block_info" */
 export type Block_Info_On_Conflict = {
   constraint: Block_Info_Constraint;
-  update_columns?: Array<Block_Info_Update_Column>;
+  update_columns: Array<Block_Info_Update_Column>;
   where?: Maybe<Block_Info_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "block_info". */
+/** ordering options when selecting data from "block_info" */
 export type Block_Info_Order_By = {
   block_reward?: Maybe<Order_By>;
   btc_block_height?: Maybe<Order_By>;
@@ -254,7 +301,7 @@ export type Block_Info_Order_By = {
   winner_to_all_commit_aggregate?: Maybe<Commit_Info_Aggregate_Order_By>;
 };
 
-/** primary key columns input for table: block_info */
+/** primary key columns input for table: "block_info" */
 export type Block_Info_Pk_Columns_Input = {
   stacks_block_height: Scalars['Int'];
 };
@@ -302,6 +349,16 @@ export type Block_Info_Stddev_Fields = {
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "block_info" */
+export type Block_Info_Stddev_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Block_Info_Stddev_Pop_Fields = {
   __typename?: 'block_info_stddev_pop_fields';
@@ -311,6 +368,16 @@ export type Block_Info_Stddev_Pop_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
   timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "block_info" */
+export type Block_Info_Stddev_Pop_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -324,6 +391,16 @@ export type Block_Info_Stddev_Samp_Fields = {
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "block_info" */
+export type Block_Info_Stddev_Samp_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Block_Info_Sum_Fields = {
   __typename?: 'block_info_sum_fields';
@@ -333,6 +410,16 @@ export type Block_Info_Sum_Fields = {
   stacks_block_height?: Maybe<Scalars['Int']>;
   timestamp?: Maybe<Scalars['Int']>;
   tx_reward?: Maybe<Scalars['float8']>;
+};
+
+/** order by sum() on columns of table "block_info" */
+export type Block_Info_Sum_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
 };
 
 /** update columns of table "block_info" */
@@ -366,6 +453,16 @@ export type Block_Info_Var_Pop_Fields = {
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "block_info" */
+export type Block_Info_Var_Pop_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Block_Info_Var_Samp_Fields = {
   __typename?: 'block_info_var_samp_fields';
@@ -377,6 +474,16 @@ export type Block_Info_Var_Samp_Fields = {
   tx_reward?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "block_info" */
+export type Block_Info_Var_Samp_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Block_Info_Variance_Fields = {
   __typename?: 'block_info_variance_fields';
@@ -386,6 +493,16 @@ export type Block_Info_Variance_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
   timestamp?: Maybe<Scalars['Float']>;
   tx_reward?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "block_info" */
+export type Block_Info_Variance_Order_By = {
+  block_reward?: Maybe<Order_By>;
+  btc_block_height?: Maybe<Order_By>;
+  commit_value?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  timestamp?: Maybe<Order_By>;
+  tx_reward?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "commit_gas_info" */
@@ -409,7 +526,7 @@ export type Commit_Gas_Info_Aggregate = {
 export type Commit_Gas_Info_Aggregate_Fields = {
   __typename?: 'commit_gas_info_aggregate_fields';
   avg?: Maybe<Commit_Gas_Info_Avg_Fields>;
-  count: Scalars['Int'];
+  count?: Maybe<Scalars['Int']>;
   max?: Maybe<Commit_Gas_Info_Max_Fields>;
   min?: Maybe<Commit_Gas_Info_Min_Fields>;
   stddev?: Maybe<Commit_Gas_Info_Stddev_Fields>;
@@ -428,6 +545,27 @@ export type Commit_Gas_Info_Aggregate_FieldsCountArgs = {
   distinct?: Maybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "commit_gas_info" */
+export type Commit_Gas_Info_Aggregate_Order_By = {
+  avg?: Maybe<Commit_Gas_Info_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Commit_Gas_Info_Max_Order_By>;
+  min?: Maybe<Commit_Gas_Info_Min_Order_By>;
+  stddev?: Maybe<Commit_Gas_Info_Stddev_Order_By>;
+  stddev_pop?: Maybe<Commit_Gas_Info_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Commit_Gas_Info_Stddev_Samp_Order_By>;
+  sum?: Maybe<Commit_Gas_Info_Sum_Order_By>;
+  var_pop?: Maybe<Commit_Gas_Info_Var_Pop_Order_By>;
+  var_samp?: Maybe<Commit_Gas_Info_Var_Samp_Order_By>;
+  variance?: Maybe<Commit_Gas_Info_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "commit_gas_info" */
+export type Commit_Gas_Info_Arr_Rel_Insert_Input = {
+  data: Array<Commit_Gas_Info_Insert_Input>;
+  on_conflict?: Maybe<Commit_Gas_Info_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Commit_Gas_Info_Avg_Fields = {
   __typename?: 'commit_gas_info_avg_fields';
@@ -435,11 +573,17 @@ export type Commit_Gas_Info_Avg_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
 };
 
+/** order by avg() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Avg_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+};
+
 /** Boolean expression to filter rows from the table "commit_gas_info". All fields are combined with a logical 'AND'. */
 export type Commit_Gas_Info_Bool_Exp = {
-  _and?: Maybe<Array<Commit_Gas_Info_Bool_Exp>>;
+  _and?: Maybe<Array<Maybe<Commit_Gas_Info_Bool_Exp>>>;
   _not?: Maybe<Commit_Gas_Info_Bool_Exp>;
-  _or?: Maybe<Array<Commit_Gas_Info_Bool_Exp>>;
+  _or?: Maybe<Array<Maybe<Commit_Gas_Info_Bool_Exp>>>;
   btc_address?: Maybe<String_Comparison_Exp>;
   commit_btc_gas_fee?: Maybe<Int_Comparison_Exp>;
   commit_btc_tx_id?: Maybe<String_Comparison_Exp>;
@@ -455,7 +599,7 @@ export enum Commit_Gas_Info_Constraint {
   MinerInfoPkey = 'miner_info_pkey'
 }
 
-/** input type for incrementing numeric columns in table "commit_gas_info" */
+/** input type for incrementing integer column in table "commit_gas_info" */
 export type Commit_Gas_Info_Inc_Input = {
   commit_btc_gas_fee?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
@@ -480,6 +624,15 @@ export type Commit_Gas_Info_Max_Fields = {
   stx_address?: Maybe<Scalars['String']>;
 };
 
+/** order by max() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Max_Order_By = {
+  btc_address?: Maybe<Order_By>;
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  commit_btc_tx_id?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  stx_address?: Maybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Commit_Gas_Info_Min_Fields = {
   __typename?: 'commit_gas_info_min_fields';
@@ -490,30 +643,38 @@ export type Commit_Gas_Info_Min_Fields = {
   stx_address?: Maybe<Scalars['String']>;
 };
 
+/** order by min() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Min_Order_By = {
+  btc_address?: Maybe<Order_By>;
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  commit_btc_tx_id?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+  stx_address?: Maybe<Order_By>;
+};
+
 /** response of any mutation on the table "commit_gas_info" */
 export type Commit_Gas_Info_Mutation_Response = {
   __typename?: 'commit_gas_info_mutation_response';
-  /** number of rows affected by the mutation */
+  /** number of affected rows by the mutation */
   affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
+  /** data of the affected rows by the mutation */
   returning: Array<Commit_Gas_Info>;
 };
 
 /** input type for inserting object relation for remote table "commit_gas_info" */
 export type Commit_Gas_Info_Obj_Rel_Insert_Input = {
   data: Commit_Gas_Info_Insert_Input;
-  /** upsert condition */
   on_conflict?: Maybe<Commit_Gas_Info_On_Conflict>;
 };
 
-/** on_conflict condition type for table "commit_gas_info" */
+/** on conflict condition type for table "commit_gas_info" */
 export type Commit_Gas_Info_On_Conflict = {
   constraint: Commit_Gas_Info_Constraint;
-  update_columns?: Array<Commit_Gas_Info_Update_Column>;
+  update_columns: Array<Commit_Gas_Info_Update_Column>;
   where?: Maybe<Commit_Gas_Info_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "commit_gas_info". */
+/** ordering options when selecting data from "commit_gas_info" */
 export type Commit_Gas_Info_Order_By = {
   btc_address?: Maybe<Order_By>;
   commit_btc_gas_fee?: Maybe<Order_By>;
@@ -522,7 +683,7 @@ export type Commit_Gas_Info_Order_By = {
   stx_address?: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: commit_gas_info */
+/** primary key columns input for table: "commit_gas_info" */
 export type Commit_Gas_Info_Pk_Columns_Input = {
   commit_btc_tx_id: Scalars['String'];
 };
@@ -557,11 +718,23 @@ export type Commit_Gas_Info_Stddev_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Stddev_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Commit_Gas_Info_Stddev_Pop_Fields = {
   __typename?: 'commit_gas_info_stddev_pop_fields';
   commit_btc_gas_fee?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+};
+
+/** order by stddev_pop() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Stddev_Pop_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
 };
 
 /** aggregate stddev_samp on columns */
@@ -571,11 +744,23 @@ export type Commit_Gas_Info_Stddev_Samp_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
 };
 
+/** order by stddev_samp() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Stddev_Samp_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+};
+
 /** aggregate sum on columns */
 export type Commit_Gas_Info_Sum_Fields = {
   __typename?: 'commit_gas_info_sum_fields';
   commit_btc_gas_fee?: Maybe<Scalars['Int']>;
   stacks_block_height?: Maybe<Scalars['Int']>;
+};
+
+/** order by sum() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Sum_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
 };
 
 /** update columns of table "commit_gas_info" */
@@ -599,6 +784,12 @@ export type Commit_Gas_Info_Var_Pop_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_pop() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Var_Pop_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Commit_Gas_Info_Var_Samp_Fields = {
   __typename?: 'commit_gas_info_var_samp_fields';
@@ -606,11 +797,23 @@ export type Commit_Gas_Info_Var_Samp_Fields = {
   stacks_block_height?: Maybe<Scalars['Float']>;
 };
 
+/** order by var_samp() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Var_Samp_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
+};
+
 /** aggregate variance on columns */
 export type Commit_Gas_Info_Variance_Fields = {
   __typename?: 'commit_gas_info_variance_fields';
   commit_btc_gas_fee?: Maybe<Scalars['Float']>;
   stacks_block_height?: Maybe<Scalars['Float']>;
+};
+
+/** order by variance() on columns of table "commit_gas_info" */
+export type Commit_Gas_Info_Variance_Order_By = {
+  commit_btc_gas_fee?: Maybe<Order_By>;
+  stacks_block_height?: Maybe<Order_By>;
 };
 
 /** columns and relationships of "commit_info" */
@@ -638,7 +841,7 @@ export type Commit_Info_Aggregate = {
 export type Commit_Info_Aggregate_Fields = {
   __typename?: 'commit_info_aggregate_fields';
   avg?: Maybe<Commit_Info_Avg_Fields>;
-  count: Scalars['Int'];
+  count?: Maybe<Scalars['Int']>;
   max?: Maybe<Commit_Info_Max_Fields>;
   min?: Maybe<Commit_Info_Min_Fields>;
   stddev?: Maybe<Commit_Info_Stddev_Fields>;
@@ -675,7 +878,6 @@ export type Commit_Info_Aggregate_Order_By = {
 /** input type for inserting array relation for remote table "commit_info" */
 export type Commit_Info_Arr_Rel_Insert_Input = {
   data: Array<Commit_Info_Insert_Input>;
-  /** upsert condition */
   on_conflict?: Maybe<Commit_Info_On_Conflict>;
 };
 
@@ -696,9 +898,9 @@ export type Commit_Info_Avg_Order_By = {
 
 /** Boolean expression to filter rows from the table "commit_info". All fields are combined with a logical 'AND'. */
 export type Commit_Info_Bool_Exp = {
-  _and?: Maybe<Array<Commit_Info_Bool_Exp>>;
+  _and?: Maybe<Array<Maybe<Commit_Info_Bool_Exp>>>;
   _not?: Maybe<Commit_Info_Bool_Exp>;
-  _or?: Maybe<Array<Commit_Info_Bool_Exp>>;
+  _or?: Maybe<Array<Maybe<Commit_Info_Bool_Exp>>>;
   btc_address?: Maybe<String_Comparison_Exp>;
   btc_block_height?: Maybe<Int_Comparison_Exp>;
   commit_btc_tx_id?: Maybe<String_Comparison_Exp>;
@@ -717,7 +919,7 @@ export enum Commit_Info_Constraint {
   CommitInfoPkey = 'commit_info_pkey'
 }
 
-/** input type for incrementing numeric columns in table "commit_info" */
+/** input type for incrementing integer column in table "commit_info" */
 export type Commit_Info_Inc_Input = {
   btc_block_height?: Maybe<Scalars['Int']>;
   commit_value?: Maybe<Scalars['Int']>;
@@ -781,20 +983,26 @@ export type Commit_Info_Min_Order_By = {
 /** response of any mutation on the table "commit_info" */
 export type Commit_Info_Mutation_Response = {
   __typename?: 'commit_info_mutation_response';
-  /** number of rows affected by the mutation */
+  /** number of affected rows by the mutation */
   affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
+  /** data of the affected rows by the mutation */
   returning: Array<Commit_Info>;
 };
 
-/** on_conflict condition type for table "commit_info" */
+/** input type for inserting object relation for remote table "commit_info" */
+export type Commit_Info_Obj_Rel_Insert_Input = {
+  data: Commit_Info_Insert_Input;
+  on_conflict?: Maybe<Commit_Info_On_Conflict>;
+};
+
+/** on conflict condition type for table "commit_info" */
 export type Commit_Info_On_Conflict = {
   constraint: Commit_Info_Constraint;
-  update_columns?: Array<Commit_Info_Update_Column>;
+  update_columns: Array<Commit_Info_Update_Column>;
   where?: Maybe<Commit_Info_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "commit_info". */
+/** ordering options when selecting data from "commit_info" */
 export type Commit_Info_Order_By = {
   btc_address?: Maybe<Order_By>;
   btc_block_height?: Maybe<Order_By>;
@@ -806,7 +1014,7 @@ export type Commit_Info_Order_By = {
   stx_address?: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: commit_info */
+/** primary key columns input for table: "commit_info" */
 export type Commit_Info_Pk_Columns_Input = {
   commit_btc_tx_id: Scalars['String'];
 };
@@ -981,7 +1189,7 @@ export type Config_Aggregate = {
 /** aggregate fields of "config" */
 export type Config_Aggregate_Fields = {
   __typename?: 'config_aggregate_fields';
-  count: Scalars['Int'];
+  count?: Maybe<Scalars['Int']>;
   max?: Maybe<Config_Max_Fields>;
   min?: Maybe<Config_Min_Fields>;
 };
@@ -993,11 +1201,24 @@ export type Config_Aggregate_FieldsCountArgs = {
   distinct?: Maybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "config" */
+export type Config_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Config_Max_Order_By>;
+  min?: Maybe<Config_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "config" */
+export type Config_Arr_Rel_Insert_Input = {
+  data: Array<Config_Insert_Input>;
+  on_conflict?: Maybe<Config_On_Conflict>;
+};
+
 /** Boolean expression to filter rows from the table "config". All fields are combined with a logical 'AND'. */
 export type Config_Bool_Exp = {
-  _and?: Maybe<Array<Config_Bool_Exp>>;
+  _and?: Maybe<Array<Maybe<Config_Bool_Exp>>>;
   _not?: Maybe<Config_Bool_Exp>;
-  _or?: Maybe<Array<Config_Bool_Exp>>;
+  _or?: Maybe<Array<Maybe<Config_Bool_Exp>>>;
   comment?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
   value?: Maybe<String_Comparison_Exp>;
@@ -1024,6 +1245,13 @@ export type Config_Max_Fields = {
   value?: Maybe<Scalars['String']>;
 };
 
+/** order by max() on columns of table "config" */
+export type Config_Max_Order_By = {
+  comment?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  value?: Maybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Config_Min_Fields = {
   __typename?: 'config_min_fields';
@@ -1032,30 +1260,43 @@ export type Config_Min_Fields = {
   value?: Maybe<Scalars['String']>;
 };
 
+/** order by min() on columns of table "config" */
+export type Config_Min_Order_By = {
+  comment?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  value?: Maybe<Order_By>;
+};
+
 /** response of any mutation on the table "config" */
 export type Config_Mutation_Response = {
   __typename?: 'config_mutation_response';
-  /** number of rows affected by the mutation */
+  /** number of affected rows by the mutation */
   affected_rows: Scalars['Int'];
-  /** data from the rows affected by the mutation */
+  /** data of the affected rows by the mutation */
   returning: Array<Config>;
 };
 
-/** on_conflict condition type for table "config" */
+/** input type for inserting object relation for remote table "config" */
+export type Config_Obj_Rel_Insert_Input = {
+  data: Config_Insert_Input;
+  on_conflict?: Maybe<Config_On_Conflict>;
+};
+
+/** on conflict condition type for table "config" */
 export type Config_On_Conflict = {
   constraint: Config_Constraint;
-  update_columns?: Array<Config_Update_Column>;
+  update_columns: Array<Config_Update_Column>;
   where?: Maybe<Config_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "config". */
+/** ordering options when selecting data from "config" */
 export type Config_Order_By = {
   comment?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   value?: Maybe<Order_By>;
 };
 
-/** primary key columns input for table: config */
+/** primary key columns input for table: "config" */
 export type Config_Pk_Columns_Input = {
   name: Scalars['String'];
 };
@@ -1087,7 +1328,7 @@ export enum Config_Update_Column {
   Value = 'value'
 }
 
-/** Boolean expression to compare columns of type "float8". All fields are combined with logical 'AND'. */
+/** expression to compare columns of type float8. All fields are combined with logical 'AND'. */
 export type Float8_Comparison_Exp = {
   _eq?: Maybe<Scalars['float8']>;
   _gt?: Maybe<Scalars['float8']>;
@@ -1321,20 +1562,21 @@ export type Mutation_RootUpdate_Config_By_PkArgs = {
 
 /** column ordering options */
 export enum Order_By {
-  /** in ascending order, nulls last */
+  /** in the ascending order, nulls last */
   Asc = 'asc',
-  /** in ascending order, nulls first */
+  /** in the ascending order, nulls first */
   AscNullsFirst = 'asc_nulls_first',
-  /** in ascending order, nulls last */
+  /** in the ascending order, nulls last */
   AscNullsLast = 'asc_nulls_last',
-  /** in descending order, nulls first */
+  /** in the descending order, nulls first */
   Desc = 'desc',
-  /** in descending order, nulls first */
+  /** in the descending order, nulls first */
   DescNullsFirst = 'desc_nulls_first',
-  /** in descending order, nulls last */
+  /** in the descending order, nulls last */
   DescNullsLast = 'desc_nulls_last'
 }
 
+/** query root */
 export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "block_info" */
@@ -1364,6 +1606,7 @@ export type Query_Root = {
 };
 
 
+/** query root */
 export type Query_RootBlock_InfoArgs = {
   distinct_on?: Maybe<Array<Block_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1373,6 +1616,7 @@ export type Query_RootBlock_InfoArgs = {
 };
 
 
+/** query root */
 export type Query_RootBlock_Info_AggregateArgs = {
   distinct_on?: Maybe<Array<Block_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1382,11 +1626,13 @@ export type Query_RootBlock_Info_AggregateArgs = {
 };
 
 
+/** query root */
 export type Query_RootBlock_Info_By_PkArgs = {
   stacks_block_height: Scalars['Int'];
 };
 
 
+/** query root */
 export type Query_RootCommit_Gas_InfoArgs = {
   distinct_on?: Maybe<Array<Commit_Gas_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1396,6 +1642,7 @@ export type Query_RootCommit_Gas_InfoArgs = {
 };
 
 
+/** query root */
 export type Query_RootCommit_Gas_Info_AggregateArgs = {
   distinct_on?: Maybe<Array<Commit_Gas_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1405,11 +1652,13 @@ export type Query_RootCommit_Gas_Info_AggregateArgs = {
 };
 
 
+/** query root */
 export type Query_RootCommit_Gas_Info_By_PkArgs = {
   commit_btc_tx_id: Scalars['String'];
 };
 
 
+/** query root */
 export type Query_RootCommit_InfoArgs = {
   distinct_on?: Maybe<Array<Commit_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1419,6 +1668,7 @@ export type Query_RootCommit_InfoArgs = {
 };
 
 
+/** query root */
 export type Query_RootCommit_Info_AggregateArgs = {
   distinct_on?: Maybe<Array<Commit_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1428,11 +1678,13 @@ export type Query_RootCommit_Info_AggregateArgs = {
 };
 
 
+/** query root */
 export type Query_RootCommit_Info_By_PkArgs = {
   commit_btc_tx_id: Scalars['String'];
 };
 
 
+/** query root */
 export type Query_RootConfigArgs = {
   distinct_on?: Maybe<Array<Config_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1442,6 +1694,7 @@ export type Query_RootConfigArgs = {
 };
 
 
+/** query root */
 export type Query_RootConfig_AggregateArgs = {
   distinct_on?: Maybe<Array<Config_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1451,10 +1704,12 @@ export type Query_RootConfig_AggregateArgs = {
 };
 
 
+/** query root */
 export type Query_RootConfig_By_PkArgs = {
   name: Scalars['String'];
 };
 
+/** subscription root */
 export type Subscription_Root = {
   __typename?: 'subscription_root';
   /** fetch data from the table: "block_info" */
@@ -1484,6 +1739,7 @@ export type Subscription_Root = {
 };
 
 
+/** subscription root */
 export type Subscription_RootBlock_InfoArgs = {
   distinct_on?: Maybe<Array<Block_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1493,6 +1749,7 @@ export type Subscription_RootBlock_InfoArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootBlock_Info_AggregateArgs = {
   distinct_on?: Maybe<Array<Block_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1502,11 +1759,13 @@ export type Subscription_RootBlock_Info_AggregateArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootBlock_Info_By_PkArgs = {
   stacks_block_height: Scalars['Int'];
 };
 
 
+/** subscription root */
 export type Subscription_RootCommit_Gas_InfoArgs = {
   distinct_on?: Maybe<Array<Commit_Gas_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1516,6 +1775,7 @@ export type Subscription_RootCommit_Gas_InfoArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootCommit_Gas_Info_AggregateArgs = {
   distinct_on?: Maybe<Array<Commit_Gas_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1525,11 +1785,13 @@ export type Subscription_RootCommit_Gas_Info_AggregateArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootCommit_Gas_Info_By_PkArgs = {
   commit_btc_tx_id: Scalars['String'];
 };
 
 
+/** subscription root */
 export type Subscription_RootCommit_InfoArgs = {
   distinct_on?: Maybe<Array<Commit_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1539,6 +1801,7 @@ export type Subscription_RootCommit_InfoArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootCommit_Info_AggregateArgs = {
   distinct_on?: Maybe<Array<Commit_Info_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1548,11 +1811,13 @@ export type Subscription_RootCommit_Info_AggregateArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootCommit_Info_By_PkArgs = {
   commit_btc_tx_id: Scalars['String'];
 };
 
 
+/** subscription root */
 export type Subscription_RootConfigArgs = {
   distinct_on?: Maybe<Array<Config_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1562,6 +1827,7 @@ export type Subscription_RootConfigArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootConfig_AggregateArgs = {
   distinct_on?: Maybe<Array<Config_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -1571,6 +1837,7 @@ export type Subscription_RootConfig_AggregateArgs = {
 };
 
 
+/** subscription root */
 export type Subscription_RootConfig_By_PkArgs = {
   name: Scalars['String'];
 };
@@ -1596,6 +1863,13 @@ export type QueryLatestTxIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type QueryLatestTxIdQuery = { __typename?: 'query_root', commit_gas_info: Array<{ __typename?: 'commit_gas_info', commit_btc_tx_id: string }> };
+
+export type UpdateTokenPriceMutationVariables = Exact<{
+  rows: Array<Config_Insert_Input> | Config_Insert_Input;
+}>;
+
+
+export type UpdateTokenPriceMutation = { __typename?: 'mutation_root', insert_config?: { __typename?: 'config_mutation_response', affected_rows: number } | null | undefined };
 
 
 export const InsertBlockInfosDocument = gql`
@@ -1630,6 +1904,16 @@ export const QueryLatestTxIdDocument = gql`
   }
 }
     `;
+export const UpdateTokenPriceDocument = gql`
+    mutation updateTokenPrice($rows: [config_insert_input!]!) {
+  insert_config(
+    objects: $rows
+    on_conflict: {constraint: config_pkey, update_columns: [value, comment]}
+  ) {
+    affected_rows
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string) => Promise<T>;
 
@@ -1649,6 +1933,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     queryLatestTxId(variables?: QueryLatestTxIdQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<QueryLatestTxIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<QueryLatestTxIdQuery>(QueryLatestTxIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'queryLatestTxId');
+    },
+    updateTokenPrice(variables: UpdateTokenPriceMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTokenPriceMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTokenPriceMutation>(UpdateTokenPriceDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTokenPrice');
     }
   };
 }

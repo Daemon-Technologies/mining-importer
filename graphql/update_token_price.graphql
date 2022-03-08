@@ -1,0 +1,10 @@
+mutation updateTokenPrice($rows: [config_insert_input!]!) {
+      insert_config(objects: $rows,
+      	on_conflict: {
+          constraint: config_pkey,
+          update_columns: [value, comment]
+        }
+      ) {
+        affected_rows
+      }
+}
