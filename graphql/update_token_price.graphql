@@ -1,4 +1,4 @@
-mutation updateTokenPrice($rows: [config_insert_input!]!) {
+mutation updateConfigItem($rows: [config_insert_input!]!) {
       insert_config(objects: $rows,
       	on_conflict: {
           constraint: config_pkey,

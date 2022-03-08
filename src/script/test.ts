@@ -13,8 +13,8 @@ import c32 from "c32check";
 import {fetchLatestBlock} from "./common/fetch-latest-block-height";
 import {fetchBurnchainOpsRowid} from "./common/fetch-burnchain-ops-rowid";
 import {fetchLatestTxId} from "./common/fetch-latest-txid";
-import {DELTA_HEIGHT} from "../common/constants";
-import {importTokenPrice} from "./common/import-token-price";
+import {DELTA_HEIGHT, INTERVAL_TIME_CONFIG, INTERVAL_TIME_MINING} from "../common/constants";
+import {importConfigItem} from "./common/import-config-item";
 
 
 
@@ -141,7 +141,7 @@ async function updateTokenPrice(){
                 }
                 rows.push(stx_row)
                 rows.push(btc_row)
-                await importTokenPrice(rows)
+                await importConfigItem(rows)
                 resolve("finished")
             }
         } catch (error){
@@ -152,23 +152,35 @@ async function updateTokenPrice(){
     })
 }
 
-
-updateTokenPrice()
-
-/*
-(async () => {
-    while (true){
+async function updateHashPower(){
+    return new Promise(async function (resolve, reject) {
         try {
-            await sleep(5000)
-            await importMiningData()
-        } catch (e) {
-            console.log(e)
+            let url = "https://api.blockchain.info/stats";
+            let res = await axios((url).toString())
+
+            if (res.data != undefined) {
+                let hash_rate = (res.data.hash_rate / 1E9).toFixed(2)
+                console.log(hash_rate)
+                let rows: Config_Insert_Input[] = []
+                let hash_rate_row: Config_Insert_Input = {
+                    name: "btc_hashrate",
+                    value: String(hash_rate),
+                    comment: "btc hash rate"
+                }
+                rows.push(hash_rate_row)
+                await importConfigItem(rows)
+                resolve("finished")
+            }
+        } catch (error) {
+            reject(error)
         }
+    }).catch((error) => {
+        console.log(error)
+    })
 
-    }
-}) ()
+}
 
- */
+
 
 async function sleep(ms) {
     console.log("sleeping")
@@ -181,21 +193,29 @@ async function sleep(ms) {
     })
 }
 
-
 /*
-async function work(ms){
-    console.log("working")
-    return new Promise<void>((resolve, reject) => {
-        setTimeout(
-            () => {
-                console.log("working time out")
-                resolve()
-            }, ms)
-
-    })
-}
-
+    Main Function
  */
+
+(async () => {
+    setInterval(
+        async function (){
+            await updateTokenPrice()
+            await updateHashPower()
+        },
+        parseInt(INTERVAL_TIME_CONFIG) * 1000
+    )
+    while (true){
+        try {
+            await sleep(parseInt(INTERVAL_TIME_MINING) * 1000)
+            await importMiningData()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+}) ()
+
+
 
 
 

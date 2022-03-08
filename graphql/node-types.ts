@@ -1864,12 +1864,12 @@ export type QueryLatestTxIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type QueryLatestTxIdQuery = { __typename?: 'query_root', commit_gas_info: Array<{ __typename?: 'commit_gas_info', commit_btc_tx_id: string }> };
 
-export type UpdateTokenPriceMutationVariables = Exact<{
+export type UpdateConfigItemMutationVariables = Exact<{
   rows: Array<Config_Insert_Input> | Config_Insert_Input;
 }>;
 
 
-export type UpdateTokenPriceMutation = { __typename?: 'mutation_root', insert_config?: { __typename?: 'config_mutation_response', affected_rows: number } | null | undefined };
+export type UpdateConfigItemMutation = { __typename?: 'mutation_root', insert_config?: { __typename?: 'config_mutation_response', affected_rows: number } | null | undefined };
 
 
 export const InsertBlockInfosDocument = gql`
@@ -1904,8 +1904,8 @@ export const QueryLatestTxIdDocument = gql`
   }
 }
     `;
-export const UpdateTokenPriceDocument = gql`
-    mutation updateTokenPrice($rows: [config_insert_input!]!) {
+export const UpdateConfigItemDocument = gql`
+    mutation updateConfigItem($rows: [config_insert_input!]!) {
   insert_config(
     objects: $rows
     on_conflict: {constraint: config_pkey, update_columns: [value, comment]}
@@ -1934,8 +1934,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     queryLatestTxId(variables?: QueryLatestTxIdQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<QueryLatestTxIdQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<QueryLatestTxIdQuery>(QueryLatestTxIdDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'queryLatestTxId');
     },
-    updateTokenPrice(variables: UpdateTokenPriceMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTokenPriceMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateTokenPriceMutation>(UpdateTokenPriceDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateTokenPrice');
+    updateConfigItem(variables: UpdateConfigItemMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateConfigItemMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateConfigItemMutation>(UpdateConfigItemDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'updateConfigItem');
     }
   };
 }
