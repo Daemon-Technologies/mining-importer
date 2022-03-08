@@ -535,13 +535,6 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
     }
     used = process.memoryUsage().heapUsed / 1024 / 1024; console.log(`The script uses approximately ${used} MB`);
     let stacks_block_results = {}
-    /*
-          winner.stacks_block_height = burn_block.stacks_block_height
-          winner.burn_chain_height = burn_block.block_height
-          winner.burn_header_timestamp = burn_block.burn_header_timestamp
-          winner.winning_block_txid = burn_block.winning_block_txid
-          winner.burn_header_hash = burn_block.burn_header_hash
-    */
     for (let stacks_block of stacks_blocks_by_height){
         const stacks_block_result = {
             stacks_block_height: stacks_block.stacks_block_height,
@@ -562,5 +555,6 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
 
     used = process.memoryUsage().heapUsed / 1024 / 1024; console.log(`The script uses approximately ${used} MB`);
     console.log("Stacks Chain Length:", stacks_blocks_by_height.length)
+    console.log("Block Commits Length:", Object.getOwnPropertyNames(blocks_commit_info).length)
     return {winner_info: stacks_block_results, block_commits: blocks_commit_info}
 }
