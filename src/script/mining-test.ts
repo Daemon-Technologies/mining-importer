@@ -218,6 +218,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
 
     function process_snapshots() {
         const result = stmt_all_blocks.all()
+        console.log(`snapshots length: ${result.length}`)
         let parent = undefined
         let tempG = undefined
         for (let row of result) {
@@ -251,6 +252,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
 
     function process_leader_keys() {
         const result = stmt_all_leader_keys.all()
+        console.log(`leader_keys length: ${result.length}`)
         // console.log("leader_keys", result)
         // console.log("process_leader_keys.length", result.length)
         for (let row of result) {
@@ -262,6 +264,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
 
     function process_block_commits() {
         const result = stmt_all_block_commits.all()
+        console.log(`block_commits length: ${result.length}`)
         // console.log("block_commits", result)
         // console.log("process_block_commits.length", result.length)
         for (let row of result) {
@@ -275,6 +278,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
 
     function process_staging_blocks() {
         const result = stmt_all_staging_blocks.all()
+        console.log(`staging_blocks length: ${result.length}`)
         // console.log("staging_blocks", result)
         // console.log("staging_blocks.length", result.length)
         // console.log("burn_blocks_by_consensus_hash", burn_blocks_by_consensus_hash)
@@ -387,6 +391,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
     }
     function process_payments() {
         const result = stmt_all_payments.all()
+        console.log(`payments length: ${result.length}`)
         // console.log("payments", result)
         // console.log("payments.length", result.length)
         // console.log("burn_blocks_by_consensus_hash", burn_blocks_by_consensus_hash)
