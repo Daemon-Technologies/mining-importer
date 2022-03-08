@@ -127,6 +127,7 @@ async function updateTokenPrice(){
             const stx_resp = await axios(stx_usdt_url)
             const btc_resp = await axios(btc_usdt_url)
             console.log(stx_resp.data)
+            console.log(btc_resp.data)
             if (stx_resp.data != undefined && btc_resp.data != undefined){
                 let rows :Config_Insert_Input[] = []
                 let stx_row : Config_Insert_Input = {
@@ -160,7 +161,7 @@ async function updateHashPower(){
 
             if (res.data != undefined) {
                 let hash_rate = (res.data.hash_rate / 1E9).toFixed(2)
-                console.log(hash_rate)
+                console.log(`hash_rate: ${hash_rate}`)
                 let rows: Config_Insert_Input[] = []
                 let hash_rate_row: Config_Insert_Input = {
                     name: "btc_hashrate",
