@@ -212,6 +212,7 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
             for (let block_commit of block.block_commits) {
                 block_commit.leader_key = find_leader_key(block_commit.key_block_ptr, block_commit.key_vtxindex)
                 block_commit.leader_key_address = block_commit.leader_key.address
+                console.log("found leader key in block commits")
             }
         }
     }
