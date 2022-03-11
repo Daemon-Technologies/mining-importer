@@ -15,8 +15,9 @@ import {fetchBurnchainOpsRowid} from "./common/fetch-burnchain-ops-rowid";
 import {fetchLatestTxId} from "./common/fetch-latest-txid";
 import {DELTA_HEIGHT, INTERVAL_TIME_CONFIG, INTERVAL_TIME_MINING} from "../common/constants";
 import {importConfigItem} from "./common/import-config-item";
-
-
+import fs from "fs"
+const file = fs.createWriteStream('./log.txt');
+let logger = new console.Console(file, file);
 
 
 
@@ -63,6 +64,12 @@ async function importMiningData() {
             let blockInfoItem: Block_Info_Insert_Input = {}
 
             // blockInfo
+            // force check to confirm if stacks_block_height is 0
+            if (block_info.stacks_block_height < start_stacks_block_height || block_info.burn_chain_height < start_btc_block_height){
+                console.log("zero block height error happens")
+                logger.log(miningInfo)
+                return
+            }
             blockInfoItem.stacks_block_height = block_info.stacks_block_height
             blockInfoItem.btc_block_height = block_info.burn_chain_height
             blockInfoItem.winner_stx_address = block_info.stx_address
