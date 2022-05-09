@@ -1,38 +1,19 @@
-import {INTERVAL_TIME_CONFIG, INTERVAL_TIME_MINING} from "./common/constants";
 import {importMiningData } from "./script/block";
 import {updateHashPower, updateTokenPrice} from "./script/config";
+import cron from 'node-cron';
 
-async function sleep(ms) {
-    console.log("sleeping")
-    return new Promise<void>((resolve, reject) => {
-        setTimeout(
-            () => {
-                console.log("sleep time out")
-                resolve()
-            }, ms)
-    })
-}
 
-/*
-    Main Function
- */
+cron.schedule('* * * * *', async function() {
+    console.log('here');
+    await updateTokenPrice()
+    await updateHashPower();
+});
 
-(async () => {
-    setInterval(
-        async function (){
-            await updateTokenPrice()
-            await updateHashPower()
-        },
-        parseInt(INTERVAL_TIME_CONFIG) * 1000
-    )
-    while (true){
-        try {
-            await sleep(parseInt(INTERVAL_TIME_MINING) * 1000)
-            await importMiningData()
-        } catch (e) {
-            console.log(e)
-        }
-    }
-}) ()
+
+
+
+cron.schedule('0 */5 * * *', async function() {
+    await importMiningData();
+});
 
 
