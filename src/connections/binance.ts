@@ -9,7 +9,7 @@ const tickerPriceUrl = (coinPair: string) => `/ticker/price?symbol=${coinPair}`;
 
 export const getStxPrice = async () => {
     try {
-        const response = await binanceApi.post(tickerPriceUrl('STXUSDT'));
+        const response = await binanceApi.get(tickerPriceUrl('STXUSDT'));
         return response.data?.price;
     } catch (e) {
         throw Error(`Cant Fetch latest Stx Price ${e}`);
@@ -17,7 +17,7 @@ export const getStxPrice = async () => {
 }
 export const getBtcPrice = async () => {
     try {
-        const response = await binanceApi.post(tickerPriceUrl('BTCUSDT'));
+        const response = await binanceApi.get(tickerPriceUrl('BTCUSDT'));
         return response.data?.price;
     } catch (e) {
         throw Error(`Cant Fetch latest BTC Price ${e}`);
