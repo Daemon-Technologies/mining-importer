@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "node --max_old_space_size=4096 -r ts-eager/register ./src/script/test.ts",
+    "start": "node --max_old_space_size=4096 -r ts-eager/register ./src/index.ts",
     "generate-graphql": "graphql-codegen --config codegen.js"
   },
   "author": "",
@@ -34,6 +34,7 @@
     "got": "^12.0.1",
     "graphql": "^16.2.0",
     "js-sha512": "^0.8.0",
+    "node-cron": "^3.0.0",
     "secp256k1": "^4.0.3"
   }
 }

@@ -4,32 +4,17 @@ import stacks_transactions from '@blockstack/stacks-transactions'
 const { getAddressFromPublicKey, TransactionVersion } = stacks_transactions
 import secp256k1 from 'secp256k1'
 import c32 from 'c32check'
-import {BTC_RPC_ENDPOINT, STACKS_NODE_SQLITE_PATH} from "../common/constants";
-import axios from "axios";
+import { STACKS_NODE_SQLITE_PATH} from "../common/constants";
+import {getRawTransaction} from "../connections/btcRpc";
+import {
+    getBurnChainOps,
+    getAllBlockCommits,
+    getAllBlocks,
+    getLeaderKeys,
+    getAllBlockHeaders,
+    getAllPayments
+} from "../services/database";
 
-async function getRawTransaction(txid){
-    let url = BTC_RPC_ENDPOINT
-    try {
-        const response = await axios({
-            method: 'post',
-            url: url,
-            data: {
-
-                "jsonrpc": "1.0",
-                "id": "curltest",
-                "method": "getrawtransaction",
-                "params": [txid, true]
-
-            }
-        })
-
-        return {response: response, error: undefined}
-    } catch (e) {
-
-        return  {response: undefined, error: e}
-    }
-
-}
 
 function getVOUTValue(vout){
     let UTXOOutput = 0
@@ -72,9 +57,9 @@ export async function getTransactionFromBtcRpc(txid, btc_address) {
         UTXOInput += getVOutValueByBtcAddress(UTXOInputOb.response.data.result.vout, btc_address)
 
     }
-
-    console.log(`UTXO Gas is ${Math.round(UTXOInput * 1e8 - UTXOOutput * 1e8)}`)
-    return Math.round(UTXOInput * 1e8 - UTXOOutput * 1e8)
+    const utxoGas = Math.round(UTXOInput * 1e8 - UTXOOutput * 1e8)
+    console.log(`UTXO Gas is ${utxoGas}`)
+    return utxoGas
 }
 
 
@@ -112,18 +97,18 @@ export async function getMinerInfo(stacks_block_height, burn_block_height, burnc
     })
     //console.log(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = ${latest_txid})`)
     // burnchain queries
-    const stmt_all_burnchain_ops = burnchain_db.prepare(`SELECT * FROM burnchain_db_block_ops WHERE rowid > (SELECT rowid FROM burnchain_db_block_ops WHERE txid = '')`)
+    const stmt_all_burnchain_ops = burnchain_db.prepare(getBurnChainOps)
 
     // sortition queries
-    const stmt_all_blocks = sortition_db.prepare(`SELECT * FROM snapshots WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height} order by block_height desc `)
+    const stmt_all_blocks = sortition_db.prepare(getAllBlocks(burn_block_height, delta_height))
 
-    const stmt_all_block_commits = sortition_db.prepare(`SELECT * FROM block_commits WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height + delta_height} order by block_height`)
+    const stmt_all_block_commits = sortition_db.prepare(getAllBlockCommits(burn_block_height, delta_height))
 
-    const stmt_all_leader_keys = sortition_db.prepare(`SELECT * FROM leader_keys WHERE block_height > ${burn_block_height} AND block_height <= ${burn_block_height+delta_height}`)
+    const stmt_all_leader_keys = sortition_db.prepare(getLeaderKeys(burn_block_height, delta_height))
 
     // header queries
-    const stmt_all_payments = headers_db.prepare(`SELECT * FROM payments WHERE stacks_block_height > ${stacks_block_height} AND stacks_block_height <= ${stacks_block_height+delta_height} order by stacks_block_height`)
-    const stmt_all_block_headers = headers_db.prepare(`SELECT * FROM block_headers WHERE block_height > ${stacks_block_height} AND block_height <= ${stacks_block_height+delta_height} order by block_height`)
+    const stmt_all_payments = headers_db.prepare(getAllPayments(stacks_block_height, delta_height))
+    const stmt_all_block_headers = headers_db.prepare(getAllBlockHeaders(stacks_block_height, delta_height))
 
     // staging queries
     const stmt_all_staging_blocks = staging_db.prepare(`SELECT * FROM staging_blocks WHERE height > ${stacks_block_height} AND height <= ${stacks_block_height+delta_height} order by height`)
